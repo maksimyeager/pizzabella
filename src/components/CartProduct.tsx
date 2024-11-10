@@ -6,7 +6,25 @@ import {
     removeProduct,
 } from "../redux/slices/cartSlice";
 
-const CartProduct = ({ id, title, price, count, imageUrl, type, size }) => {
+type CartProductProps = {
+    id: string;
+    title: string;
+    price: number;
+    count: number;
+    imageUrl: string;
+    type: string;
+    size: number;
+};
+
+const CartProduct: React.FC<CartProductProps> = ({
+    id,
+    title,
+    price,
+    count,
+    imageUrl,
+    type,
+    size,
+}) => {
     const dispatch = useDispatch();
 
     const handleAddProduct = () => {
@@ -16,13 +34,17 @@ const CartProduct = ({ id, title, price, count, imageUrl, type, size }) => {
     const handleMinusProduct = () => {
         if (count > 0) {
             dispatch(minusProduct(id));
-        }else{
-            dispatch(removeProduct(id))
+        } else {
+            dispatch(removeProduct(id));
         }
     };
 
     const handleRemoveProduct = () => {
-        if(window.confirm("Вы действительно хотите удалить продукт из корзины?")){
+        if (
+            window.confirm(
+                "Вы действительно хотите удалить продукт из корзины?"
+            )
+        ) {
             dispatch(removeProduct(id));
         }
     };
@@ -38,7 +60,9 @@ const CartProduct = ({ id, title, price, count, imageUrl, type, size }) => {
             </div>
             <div className="cart__item-info">
                 <h3>{title}</h3>
-                <p>{type}, {size} см.</p>
+                <p>
+                    {type}, {size} см.
+                </p>
             </div>
             <div className="cart__item-count">
                 <div

@@ -1,30 +1,34 @@
+import React from "react";
 import { useState, useCallback, useContext, useRef } from "react";
 import styles from "./Search.module.scss";
-import { SearchContext } from "../../App";
+import { SearchContext } from "../../App.tsx";
 import debounce from "lodash.debounce";
 
 const Search = () => {
-    const [inputValue, setInputValue] = useState("")
+    const [inputValue, setInputValue] = useState("");
     const { setSearchValue } = useContext(SearchContext);
-    const inputRef = useRef();
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    const updateSerachValue  = useCallback(
-        debounce((str) => {
-            setSearchValue(str)
-            console.log("Search Update")
+    const updateSerachValue = useCallback(
+        debounce((str: string) => {
+            setSearchValue(str);
+            console.log("Search Update");
         }, 500),
         []
     );
 
     const onChangeInput = (e) => {
-        setInputValue(e.target.value)
-        updateSerachValue(e.target.value)
+        setInputValue(e.target.value);
+        updateSerachValue(e.target.value);
     };
 
     const onClickSearchClear = () => {
         setInputValue("");
         setSearchValue("");
-        inputRef.current.focus();
+        // if (inputRef.current) {
+        //     inputRef.current.focus();
+        // }
+        inputRef.current?.focus()
     };
 
     return (

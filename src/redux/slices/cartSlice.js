@@ -70,6 +70,8 @@ const cartSlice = createSlice({
     },
 });
 
+export const cartSelector = (state) => state.cartReducer
+
 export const {
     addProduct,
     plusProduct,

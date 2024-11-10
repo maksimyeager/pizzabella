@@ -1,20 +1,27 @@
+import React from "react";
 import { useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import { useSelector, useDispatch } from "react-redux";
 import {
+    filterSelector,
+    filterSortPropertySelector,
     setCategoryId,
     setCurrentPage,
     setFilters,
 } from "../redux/slices/filterSlice";
-import { setIsLoading, fetchProducts } from "../redux/slices/productsSlice";
-import { sortList } from "../components/Sort";
-import Categories from "../components/Categories";
-import Sort from "../components/Sort";
-import Product from "../components/Product/Product";
-import Skeleton from "../components/Product/Skeleton";
-import Pagination from "../components/Pagination/Pagination";
-import { SearchContext } from "../App";
+import {
+    setIsLoading,
+    fetchProducts,
+    productsSelector,
+} from "../redux/slices/productsSlice";
+import { sortList } from "../components/Sort.tsx";
+import Categories from "../components/Categories.tsx";
+import Sort from "../components/Sort.tsx";
+import Product from "../components/Product/Product.tsx";
+import Skeleton from "../components/Product/Skeleton.tsx";
+import Pagination from "../components/Pagination/Pagination.tsx";
+import { SearchContext } from "../App.tsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -23,22 +30,19 @@ const Home = () => {
     const isSearch = useRef(false);
     const isMounted = useRef(false);
 
-    const products = useSelector((state) => state.productsReducer.products);
-    const isLoading = useSelector((state) => state.productsReducer.isLoading);
-    const status = useSelector((state) => state.productsReducer.status);
-    const categoryId = useSelector((state) => state.filterReducer.categoryId);
-    const sortType = useSelector(
-        (state) => state.filterReducer.sortType.sortProperty
-    );
-    const currentPage = useSelector((state) => state.filterReducer.currentPage);
+    const { products, status } = useSelector(productsSelector);
+
+    const { categoryId, currentPage } = useSelector(filterSelector);
+    const sortType = useSelector(filterSortPropertySelector);
+
     const dispatch = useDispatch();
 
-    const onClickCategory = (id) => {
+    const onClickCategory = (id: number) => {
         dispatch(setCategoryId(id));
     };
 
-    const onChangePage = (number) => {
-        dispatch(setCurrentPage(number));
+    const onChangePage = (page: number) => {
+        dispatch(setCurrentPage(page));
     };
 
     // Pizzas Fetch Function
@@ -49,6 +53,7 @@ const Home = () => {
         const order = sortType.includes("-") ? "asc" : "desc";
 
         dispatch(
+            // @ts-ignore
             fetchProducts({
                 category,
                 sortBy,
@@ -96,7 +101,8 @@ const Home = () => {
 
     // Products Render
     const pizzas = products
-        .filter((product) => {
+        // Поиск пицц из запроса в Seearch
+        .filter((product: any) => {
             if (
                 product.title.toLowerCase().includes(searchValue.toLowerCase())
             ) {
@@ -124,11 +130,26 @@ const Home = () => {
             {status === "error" ? (
                 <div className="content__error-info">
                     <h2>Произошла ошибка 😕</h2>
-                    <p>К сожалению, не удалось получить питсы. Попробуйте повторить попытку позже.</p>
+                    <p>
+                        К сожалению, не удалось получить питсы. Попробуйте
+                        повторить попытку позже.
+                    </p>
                 </div>
             ) : (
                 <div className="content__items">
-                    {status === "loading" ? skeletons : pizzas}
+                    {status === "loading" ? (
+                        skeletons
+                    ) : pizzas.length > 0 ? (
+                        pizzas
+                    ) : (
+                        <div className="content__error-info">
+                            <h2>Произошла ошибка 😕</h2>
+                            <p>
+                                К сожалению, не удалось получить питсы.
+                                Попробуйте повторить попытку позже.
+                            </p>
+                        </div>
+                    )}
                 </div>
             )}
             <Pagination value={currentPage} onChangePage={onChangePage} />

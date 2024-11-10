@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 import emptyCartImg from "../assets/img/empty-cart.png";
@@ -6,7 +7,7 @@ const CartEmpty = () => {
     return (
         <div className="cart cart--empty">
             <h2>
-                Корзина пустая <icon>😕</icon>
+                Корзина пустая <span>😕</span>
             </h2>
             <p>
                 Вероятней всего, вы не заказывали ещё пиццу.

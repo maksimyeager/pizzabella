@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchProducts = createAsyncThunk(
     "products/fetchProductsStatus",
-    async ({ currentPage, category, sortBy, order }) => {
+    async ({ currentPage, category, sortBy, order }, thunkAPI) => {
         const response = await axios.get(
             `https://6717d67cb910c6a6e02a3843.mockapi.io/products?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}`
         );
@@ -30,7 +30,7 @@ const productsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.pending, (state) => {
             state.status = "loading";
-            state.products = []
+            state.products = [];
         });
         builder.addCase(fetchProducts.fulfilled, (state, action) => {
             state.products = action.payload;
@@ -42,6 +42,8 @@ const productsSlice = createSlice({
         });
     },
 });
+
+export const productsSelector = (state) => state.productsReducer
 
 export const { setProducts, setIsLoading } = productsSlice.actions;
 

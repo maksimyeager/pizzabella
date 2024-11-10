@@ -1,26 +1,26 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {clearCart} from "../redux/slices/cartSlice";
+import { cartSelector, clearCart } from "../redux/slices/cartSlice";
 
-import CartProduct from "../components/CartProduct";
-import CartEmpty from "../components/CartEmpty";
+import CartProduct from "../components/CartProduct.tsx";
+import CartEmpty from "../components/CartEmpty.tsx";
 
-const Cart = () => {
+const Cart: React.FC = () => {
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.cartReducer.products);
-    const totalPrice  = useSelector((state) => state.cartReducer.totalPrice);
-    const totalCountProducts = products.reduce((sum, obj) => {
+    const { products, totalPrice } = useSelector(cartSelector);
+    const totalCountProducts = products.reduce((sum: number, obj: any) => {
         return sum + obj.count;
     }, 0);
 
     const handleCartClear = () => {
-        if(window.confirm("Вы действительно хотите очистить коризну?")){
+        if (window.confirm("Вы действительно хотите очистить коризну?")) {
             dispatch(clearCart());
         }
-    }
+    };
 
-    if(totalCountProducts == 0){
-        return <CartEmpty/>
+    if (totalCountProducts === 0) {
+        return <CartEmpty />;
     }
 
     return (
@@ -101,7 +101,7 @@ const Cart = () => {
                     </div>
                 </div>
                 <div className="content__items">
-                    {products.map((product) => {
+                    {products.map((product: any) => {
                         return <CartProduct key={product.id} {...product} />;
                     })}
                 </div>

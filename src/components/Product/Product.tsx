@@ -1,15 +1,36 @@
+import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addProduct } from "../../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
 
-const typeNames = ["тонкое", "традиционое"];
+const typeNames: string[] = ["тонкое", "традиционое"];
 
-const Product = ({ id, imageUrl, title, types, sizes, price }) => {
+type ProductProps = {
+    id: string;
+    imageUrl: string;
+    title: string;
+    types: number[];
+    sizes: number[];
+    price: number;
+    rating: number;
+};
+
+const Product: React.FC<ProductProps> = ({
+    id,
+    imageUrl,
+    title,
+    types,
+    sizes,
+    price,
+}) => {
     const [activeType, setActiveType] = useState(0);
     const [activeSize, setActiveSize] = useState(0);
 
-    const dispatch = useDispatch()
-    const cartProduct = useSelector(state => state.cartReducer.products.find(obj => obj.id === id))
+    const dispatch = useDispatch();
+    const cartProduct = useSelector((state) =>
+        state.cartReducer.products.find((obj) => obj.id === id)
+    );
     const addedCount = cartProduct ? cartProduct.count : 0;
     const onClickAddProduct = () => {
         const product = {
@@ -18,21 +39,25 @@ const Product = ({ id, imageUrl, title, types, sizes, price }) => {
             price,
             imageUrl,
             type: typeNames[activeType],
-            size: sizes[activeSize]
-        }
-        dispatch(addProduct(product))
-        console.log(addedCount)
-    }
+            size: sizes[activeSize],
+        };
+        dispatch(addProduct(product));
+        console.log(addedCount);
+    };
 
     return (
         <div className="pizza-block__wrapper">
             <div className="pizza-block">
-                <img
-                    className="pizza-block__image"
-                    src={imageUrl}
-                    alt="Pizza"
-                />
-                <h4 className="pizza-block__title">{title}</h4>
+                <div className="pizza-block__info">
+                    <Link to={`/pizza/${id}`}>
+                        <img
+                            className="pizza-block__image"
+                            src={imageUrl}
+                            alt="Pizza"
+                        />
+                        <h4 className="pizza-block__title">{title}</h4>
+                    </Link>
+                </div>
                 <div className="pizza-block__selector">
                     <ul>
                         {types.map((typeId) => {
@@ -67,7 +92,10 @@ const Product = ({ id, imageUrl, title, types, sizes, price }) => {
                 </div>
                 <div className="pizza-block__bottom">
                     <div className="pizza-block__price">от {price} ₽</div>
-                    <button className="button button--outline button--add" onClick={onClickAddProduct}>
+                    <button
+                        className="button button--outline button--add"
+                        onClick={onClickAddProduct}
+                    >
                         <svg
                             width="12"
                             height="12"
