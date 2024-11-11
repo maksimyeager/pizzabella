@@ -4,7 +4,7 @@ import {
     plusProduct,
     minusProduct,
     removeProduct,
-} from "../redux/slices/cartSlice";
+} from "../redux/slices/cartSlice.ts";
 
 type CartProductProps = {
     id: string;

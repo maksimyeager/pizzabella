@@ -1,12 +1,17 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { filterSelector, setSortType } from "../redux/slices/filterSlice";
+import { filterSelector, setSortType } from "../redux/slices/filterSlice.ts";
 
 type SortListItem = {
     name: string;
-    sortProperty: string;
+    sortProperty: "rating" | "-rating" | "price" | "-price" | "title" | "-title";
 };
+
+type OutsideClick = MouseEvent & {
+    path: Node[]
+}
+
 
 export const sortList: SortListItem[] = [
     { name: "популярности (DESC)", sortProperty: "rating" },
@@ -30,8 +35,9 @@ const Sort = () => {
     };
 
     useEffect(() => {
-        const handleClickOutsideSort = (e) => {
-            if (!e.composedPath().includes(sortRef.current)) {
+        const handleClickOutsideSort = (e: MouseEvent) => {
+            const _event = e as OutsideClick
+            if (sortRef.current && !_event.composedPath().includes(sortRef.current)) {
                 setOpen(false);
             }
         };

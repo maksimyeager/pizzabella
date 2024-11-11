@@ -1,6 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "./../store.ts";
 
-const initialState = {
+export type CartProduct = {
+    id: string;
+    title: string;
+    price: number;
+    imageUrl: string;
+    type: string;
+    size: number;
+    count: number;
+};
+
+interface CartSliceState {
+    totalPrice: number;
+    products: CartProduct[];
+}
+
+const initialState: CartSliceState = {
     totalPrice: 0,
     products: [],
 };
@@ -15,7 +31,7 @@ const cartSlice = createSlice({
         //     return obj.price + sum
         // }, 0)
         // },
-        addProduct: (state, action) => {
+        addProduct: (state, action: PayloadAction<CartProduct>) => {
             const findProduct = state.products.find(
                 (obj) => obj.id === action.payload.id
             );
@@ -33,7 +49,7 @@ const cartSlice = createSlice({
                 return obj.price * obj.count + sum;
             }, 0);
         },
-        plusProduct: (state, action) => {
+        plusProduct: (state, action: PayloadAction<string>) => {
             const findProduct = state.products.find(
                 (obj) => obj.id === action.payload
             );
@@ -41,7 +57,7 @@ const cartSlice = createSlice({
                 findProduct.count++;
             }
         },
-        minusProduct: (state, action) => {
+        minusProduct: (state, action: PayloadAction<string>) => {
             const findProduct = state.products.find(
                 (obj) => obj.id === action.payload
             );
@@ -58,7 +74,7 @@ const cartSlice = createSlice({
                 }
             }
         },
-        removeProduct: (state, action) => {
+        removeProduct: (state, action: PayloadAction<string>) => {
             state.products = state.products.filter(
                 (obj) => obj.id !== action.payload
             );
@@ -70,7 +86,7 @@ const cartSlice = createSlice({
     },
 });
 
-export const cartSelector = (state) => state.cartReducer
+export const cartSelector = (state: RootState) => state.cartReducer;
 
 export const {
     addProduct,

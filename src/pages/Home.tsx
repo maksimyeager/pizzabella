@@ -9,12 +9,11 @@ import {
     setCategoryId,
     setCurrentPage,
     setFilters,
-} from "../redux/slices/filterSlice";
+} from "../redux/slices/filterSlice.ts";
 import {
-    setIsLoading,
     fetchProducts,
     productsSelector,
-} from "../redux/slices/productsSlice";
+} from "../redux/slices/productsSlice.ts";
 import { sortList } from "../components/Sort.tsx";
 import Categories from "../components/Categories.tsx";
 import Sort from "../components/Sort.tsx";
@@ -47,7 +46,6 @@ const Home = () => {
 
     // Pizzas Fetch Function
     const getProducts = async () => {
-        dispatch(setIsLoading(true));
         const category = categoryId > 0 ? `category=${categoryId}` : "";
         const sortBy = sortType.replace("-", "");
         const order = sortType.includes("-") ? "asc" : "desc";
@@ -152,7 +150,7 @@ const Home = () => {
                     )}
                 </div>
             )}
-            <Pagination value={currentPage} onChangePage={onChangePage} />
+            <Pagination currentPage={currentPage} onChangePage={onChangePage} />
         </div>
     );
 };

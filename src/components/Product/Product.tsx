@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addProduct } from "../../redux/slices/cartSlice";
+import { addProduct, CartProduct } from "../../redux/slices/cartSlice.ts";
 import { Link } from "react-router-dom";
+import { RootState } from "../../redux/store.ts";
 
 const typeNames: string[] = ["тонкое", "традиционое"];
 
@@ -28,18 +29,19 @@ const Product: React.FC<ProductProps> = ({
     const [activeSize, setActiveSize] = useState(0);
 
     const dispatch = useDispatch();
-    const cartProduct = useSelector((state) =>
+    const cartProduct = useSelector((state: RootState) =>
         state.cartReducer.products.find((obj) => obj.id === id)
     );
     const addedCount = cartProduct ? cartProduct.count : 0;
     const onClickAddProduct = () => {
-        const product = {
+        const product: CartProduct = {
             id,
             title,
             price,
             imageUrl,
             type: typeNames[activeType],
             size: sizes[activeSize],
+            count: 0
         };
         dispatch(addProduct(product));
         console.log(addedCount);
