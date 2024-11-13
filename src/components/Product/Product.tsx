@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addProduct, CartProduct } from "../../redux/slices/cartSlice.ts";
+import { addProduct } from "../../redux/cart/slice.ts";
+import { CartProduct } from "../../redux/cart/types.ts";
 import { Link } from "react-router-dom";
 import { RootState } from "../../redux/store.ts";
 
@@ -41,17 +42,16 @@ const Product: React.FC<ProductProps> = ({
             imageUrl,
             type: typeNames[activeType],
             size: sizes[activeSize],
-            count: 0
+            count: 0,
         };
         dispatch(addProduct(product));
-        console.log(addedCount);
     };
 
     return (
         <div className="pizza-block__wrapper">
             <div className="pizza-block">
                 <div className="pizza-block__info">
-                    <Link to={`/pizza/${id}`}>
+                    <Link key={id} to={`/pizza/${id}`}>
                         <img
                             className="pizza-block__image"
                             src={imageUrl}

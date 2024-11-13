@@ -1,26 +1,21 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
-import { useSelector, useDispatch } from "react-redux";
-import {
-    filterSelector,
-    filterSortPropertySelector,
-    setCategoryId,
-    setCurrentPage,
-    setFilters,
-} from "../redux/slices/filterSlice.ts";
-import {
-    fetchProducts,
-    productsSelector,
-} from "../redux/slices/productsSlice.ts";
+import { useSelector } from "react-redux";
+import { SearchContext } from "../App.tsx";
+import { useAppDispatch } from "../redux/store.ts";
+import { fetchProducts } from "../redux/products/slice.ts";
+import { filterSelector } from "../redux/filter/selectors.ts";
+import { setCategoryId, setCurrentPage, setFilters } from "../redux/filter/slice.ts";
+import { SearchProductParams } from "../redux/products/types.ts";
+import { productsSelector } from "../redux/products/selectors.ts";
 import { sortList } from "../components/Sort.tsx";
 import Categories from "../components/Categories.tsx";
 import Sort from "../components/Sort.tsx";
 import Product from "../components/Product/Product.tsx";
 import Skeleton from "../components/Product/Skeleton.tsx";
 import Pagination from "../components/Pagination/Pagination.tsx";
-import { SearchContext } from "../App.tsx";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -31,14 +26,14 @@ const Home = () => {
 
     const { products, status } = useSelector(productsSelector);
 
-    const { categoryId, currentPage } = useSelector(filterSelector);
-    const sortType = useSelector(filterSortPropertySelector);
+    const { categoryId, currentPage, sortType } = useSelector(filterSelector);
+    // const  = useSelector(filterSortPropertySelector);
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const onClickCategory = (id: number) => {
+    const onClickCategory = useCallback((id: number) => {
         dispatch(setCategoryId(id));
-    };
+    }, []);
 
     const onChangePage = (page: number) => {
         dispatch(setCurrentPage(page));
@@ -47,11 +42,10 @@ const Home = () => {
     // Pizzas Fetch Function
     const getProducts = async () => {
         const category = categoryId > 0 ? `category=${categoryId}` : "";
-        const sortBy = sortType.replace("-", "");
-        const order = sortType.includes("-") ? "asc" : "desc";
+        const sortBy = sortType.sortProperty.replace("-", "");
+        const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
 
         dispatch(
-            // @ts-ignore
             fetchProducts({
                 category,
                 sortBy,
@@ -77,14 +71,17 @@ const Home = () => {
     // Проверяем URL - параметры, при первом рендере, и сохраняем их в Redux
     useEffect(() => {
         if (window.location.search) {
-            const params = qs.parse(window.location.search.substring(1));
+            const params = qs.parse(
+                window.location.search.substring(1)
+            ) as unknown as SearchProductParams;
             const sortType = sortList.find(
-                (obj) => obj.sortProperty === params.sortType
+                (obj) => obj.sortProperty === params.sortBy
             );
             dispatch(
                 setFilters({
-                    ...params,
-                    sortType,
+                    currentPage: params.currentPage || 1,
+                    categoryId: Number(params.category) || 0,
+                    sortType: sortType || sortList[0],
                 })
             );
             isSearch.current = true;
@@ -122,7 +119,7 @@ const Home = () => {
                     value={categoryId}
                     onClickCategory={onClickCategory}
                 />
-                <Sort />
+                <Sort value={sortType} />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             {status === "error" ? (

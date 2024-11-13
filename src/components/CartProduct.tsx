@@ -4,7 +4,7 @@ import {
     plusProduct,
     minusProduct,
     removeProduct,
-} from "../redux/slices/cartSlice.ts";
+} from "../redux/cart/slice.ts";
 
 type CartProductProps = {
     id: string;
@@ -65,8 +65,9 @@ const CartProduct: React.FC<CartProductProps> = ({
                 </p>
             </div>
             <div className="cart__item-count">
-                <div
+                <button
                     className="button button--outline button--circle cart__item-count-minus"
+                    disabled = {count === 1}
                     onClick={handleMinusProduct}
                 >
                     <svg
@@ -85,9 +86,9 @@ const CartProduct: React.FC<CartProductProps> = ({
                             fill="#EB5A1E"
                         />
                     </svg>
-                </div>
+                </button>
                 <b>{count}</b>
-                <div
+                <button
                     className="button button--outline button--circle cart__item-count-plus"
                     onClick={handleAddProduct}
                 >
@@ -107,13 +108,13 @@ const CartProduct: React.FC<CartProductProps> = ({
                             fill="#EB5A1E"
                         />
                     </svg>
-                </div>
+                </button>
             </div>
             <div className="cart__item-price">
                 <b>{price * count} ₽</b>
             </div>
             <div className="cart__item-remove">
-                <div
+                <button
                     className="button button--outline button--circle"
                     onClick={handleRemoveProduct}
                 >
@@ -133,7 +134,7 @@ const CartProduct: React.FC<CartProductProps> = ({
                             fill="#EB5A1E"
                         />
                     </svg>
-                </div>
+                </button>
             </div>
         </div>
     );

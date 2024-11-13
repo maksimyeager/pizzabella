@@ -1,43 +1,49 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { filterSelector, setSortType } from "../redux/slices/filterSlice.ts";
+import { useDispatch } from "react-redux";
+import { SortPropertyEnum, SortType } from "../redux/filter/types.ts";
+import { setSortType } from "../redux/filter/slice.ts";
 
 type SortListItem = {
     name: string;
-    sortProperty: "rating" | "-rating" | "price" | "-price" | "title" | "-title";
+    sortProperty: SortPropertyEnum;
 };
 
 type OutsideClick = MouseEvent & {
-    path: Node[]
-}
+    path: Node[];
+};
 
+type SortPropsType = {
+    value: SortType;
+};
 
 export const sortList: SortListItem[] = [
-    { name: "популярности (DESC)", sortProperty: "rating" },
-    { name: "популярности (ASC)", sortProperty: "-rating" },
-    { name: "цене (DESC)", sortProperty: "price" },
-    { name: "цене (ASC)", sortProperty: "-price" },
-    { name: "алфавиту (DESC)", sortProperty: "title" },
-    { name: "алфавиту (ASC)", sortProperty: "-title" },
+    { name: "популярности (DESC)", sortProperty: SortPropertyEnum.RATING_DESC },
+    { name: "популярности (ASC)", sortProperty: SortPropertyEnum.RATING_ASC },
+    { name: "цене (DESC)", sortProperty: SortPropertyEnum.PRICE_DESC },
+    { name: "цене (ASC)", sortProperty: SortPropertyEnum.PRICE_ASC },
+    { name: "алфавиту (DESC)", sortProperty: SortPropertyEnum.TITLE_DESC },
+    { name: "алфавиту (ASC)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-const Sort = () => {
+const Sort: React.FC<SortPropsType> = ({ value }) => {
     const [open, setOpen] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
 
-    const { sortType } = useSelector(filterSelector);
     const dispatch = useDispatch();
 
-    const handlePopUpClick = (obj:SortListItem) => {
+    const handlePopUpClick = (obj: SortListItem) => {
         dispatch(setSortType(obj));
         setOpen(false);
     };
 
     useEffect(() => {
         const handleClickOutsideSort = (e: MouseEvent) => {
-            const _event = e as OutsideClick
-            if (sortRef.current && !_event.composedPath().includes(sortRef.current)) {
+            const _event = e as OutsideClick;
+            if (
+                sortRef.current &&
+                !_event.composedPath().includes(sortRef.current)
+            ) {
                 setOpen(false);
             }
         };
@@ -81,7 +87,7 @@ const Sort = () => {
                 )}
 
                 <b>Сортировка по:</b>
-                <span onClick={() => setOpen(!open)}>{sortType.name}</span>
+                <span onClick={() => setOpen(!open)}>{value.name}</span>
             </div>
 
             {open && (
@@ -93,8 +99,7 @@ const Sort = () => {
                                     key={index}
                                     onClick={() => handlePopUpClick(obj)}
                                     className={
-                                        sortType.sortProperty ===
-                                        obj.sortProperty
+                                        value.sortProperty === obj.sortProperty
                                             ? "active"
                                             : ""
                                     }

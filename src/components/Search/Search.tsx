@@ -12,7 +12,6 @@ const Search = () => {
     const updateSerachValue = useCallback(
         debounce((str: string) => {
             setSearchValue(str);
-            console.log("Search Update");
         }, 500),
         []
     );
@@ -28,7 +27,7 @@ const Search = () => {
         // if (inputRef.current) {
         //     inputRef.current.focus();
         // }
-        inputRef.current?.focus()
+        inputRef.current?.focus();
     };
 
     return (
