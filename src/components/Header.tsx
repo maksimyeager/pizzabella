@@ -6,8 +6,7 @@ import logo from "../assets/img/pizza-logo.svg";
 import Search from "./Search/Search.tsx";
 import { cartSelector } from "../redux/cart/selectors.ts";
 
-
-const Header = () => {
+const Header: React.FC = () => {
     const { products, totalPrice } = useSelector(cartSelector);
     const location = useLocation();
     const totalCountProducts = products.reduce((sum, obj) => {
@@ -35,7 +34,9 @@ const Header = () => {
                         </div>
                     </div>
                 </Link>
-                {location.pathname !== "/cart" && <Search />}
+                <div className="header__search">
+                    {location.pathname !== "/cart" && <Search />}
+                </div>
                 <div className="header__cart">
                     <Link to={"/cart"} className="button button--cart">
                         <span>{totalPrice} ₽</span>

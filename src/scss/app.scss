@@ -24,9 +24,20 @@ body {
         font-weight: 800;
         font-size: 42px;
         margin: 50px 0;
+
+        @media (max-width: 576px) {
+            font-size: 32px;
+        }
     }
 
     &__items {
+        // display: flex;
+        // justify-content: flex-start;
+        // flex-wrap: wrap;
+        // gap: 30px;
+        // @media (max-width: 576px) {
+        //     justify-content: center;
+        // }
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         // grid-template-rows: repeat(2, 1fr);
@@ -50,9 +61,20 @@ body {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        @media (max-width: 1140px) {
+            flex-direction: column-reverse;
+
+            .categories{
+                margin-top: 30px;
+                 ul{
+                    overflow: scroll;
+                    width: 300px;
+                 }
+            }
+        }
     }
 
-    &__error-info{
+    &__error-info {
         margin: 80px auto;
         width: 500px;
         text-align: center;
@@ -91,12 +113,21 @@ body {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        @media (max-width: 576px) {
+            flex-direction: column;
+            align-items: start;
+            gap: 30px;
+        }
     }
 
     .content__title {
         display: flex;
         align-items: center;
         font-size: 32px;
+        @media (max-width: 576px) {
+            font-size: 28px;
+        }
 
         svg {
             position: relative;
@@ -142,26 +173,54 @@ body {
         }
     }
 
-    .content__items{
-      display: block;
+    .content__items {
+        display: block;
     }
 
     &__item {
+        position: relative;
         display: flex;
+        justify-content: space-between;
         width: 100%;
         border-top: 1px solid $gray-line;
         padding-top: 30px;
         margin-top: 30px;
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        &-data {
+            width: 50%;
+            display: flex;
+            @media (max-width: 768px) {
+                width: 100%;
+                padding-right: 40px;
+            }
+        }
+
+        &-settings {
+            width: 40%;
+            display: flex;
+            justify-content: space-between;
+
+            @media (max-width: 576px) {
+                width: 100%;
+            }
+        }
 
         &-img {
             display: flex;
             align-items: center;
             margin-right: 15px;
-            width: 10%;
-
             img {
-                width: 80px;
-                height: 80px;
+                width: 100px;
+                height: 100px;
+
+                @media (max-width: 576px) {
+                    width: 80px;
+                    height: 80px;
+                }
             }
         }
 
@@ -169,18 +228,23 @@ body {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            width: 40%;
 
             h3 {
                 font-weight: bold;
                 font-size: 22px;
                 line-height: 27px;
                 letter-spacing: 0.01em;
+                @media (max-width: 576px) {
+                    font-size: 20px;
+                }
             }
 
             p {
                 font-size: 18px;
                 color: #8d8d8d;
+                @media (max-width: 576px) {
+                    font-size: 16px;
+                }
             }
         }
 
@@ -188,7 +252,7 @@ body {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 13%;
+            width: 120px;
 
             &-minus {
                 svg {
@@ -207,8 +271,6 @@ body {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 33%;
-
             b {
                 font-weight: bold;
                 font-size: 22px;
@@ -220,7 +282,13 @@ body {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            width: 4%;
+            width: 5%;
+
+            @media (max-width: 768px) {
+                position: absolute;
+                top: 60px;
+                right: 0;
+            }
 
             .button {
                 border-color: darken($color: $gray-line, $amount: 10);
@@ -258,12 +326,20 @@ body {
 
             span {
                 font-size: 22px;
+                @media (max-width: 576px) {
+                    font-size: 20px;
+                }
 
                 &:last-of-type {
                     b {
                         color: $orange;
                     }
                 }
+            }
+
+            @media (max-width: 576px) {
+                flex-direction: column;
+                gap: 10px;
             }
         }
 
@@ -273,6 +349,8 @@ body {
             margin-top: 40px;
 
             .go-back-btn {
+                font-size: 16px;
+                padding: 16px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -282,7 +360,6 @@ body {
 
                 span {
                     color: darken($color: $gray-line, $amount: 20);
-                    font-weight: 500;
                     font-weight: 600;
                 }
 
@@ -310,18 +387,29 @@ body {
                 width: 210px;
                 padding: 16px;
             }
+
+            @media (max-width: 576px) {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     }
 
     &--empty {
         margin: 80px auto;
-        width: 650px;
         text-align: center;
+
+        @media (max-width: 756px) {
+            margin: 40px auto;
+        }
 
         h2 {
             font-size: 36px;
             font-weight: 700;
             margin-bottom: 10px;
+            @media (max-width: 756px) {
+                font-size: 28px;
+            }
         }
 
         p {
@@ -329,6 +417,9 @@ body {
             line-height: 145.4%;
             letter-spacing: 0.01em;
             color: #777777;
+            @media (max-width: 756px) {
+                font-size: 18px;
+            }
         }
 
         icon {
